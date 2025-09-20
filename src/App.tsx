@@ -137,7 +137,7 @@ function App() {
 
       // Відправка до Make.com або твого API
       const response = await fetch(
-        "https://hook.eu1.make.com/YOUR_ORDER_WEBHOOK_ID",
+        "https://hook.eu2.make.com/6pg72axri773n5j383wqhuonhymaq3wf",
         {
           method: "POST",
           headers: {

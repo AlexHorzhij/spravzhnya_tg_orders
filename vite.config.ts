@@ -6,6 +6,6 @@ export default defineConfig({
   plugins: [react()],
   base: "/spravzhnya_tg_orders/",
   server: {
-    allowedHosts: ["futures-draft-madness-appearance.trycloudflare.com"],
+    allowedHosts: ["alexhorzhij.github.io"],
   },
 });
