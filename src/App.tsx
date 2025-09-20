@@ -194,7 +194,10 @@ function App() {
           <Typography variant="h6">Вітаємо, {tgUser.first_name}! 👋</Typography>
           {tgUser.username && (
             <Typography variant="body2" color="text.secondary">
-              @{tgUser.username}
+              <div>@{tgUser.username}</div>
+              <div>
+                {tgUser.first_name} {tgUser.last_name}
+              </div>
             </Typography>
           )}
         </Box>
