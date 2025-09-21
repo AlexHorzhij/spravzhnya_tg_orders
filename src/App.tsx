@@ -83,6 +83,7 @@ function App() {
         setFormData((prev) => ({
           ...prev,
           establishment: userData[0].company || prev.establishment,
+          order: userData[0].order || prev.order,
           // інші дані з таблиці
         }));
       }
