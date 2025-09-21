@@ -240,7 +240,7 @@ function App() {
           label="Замовлення"
           variant="outlined"
           rows={5}
-          value={formData.order}
+          value={formData.order.split(",").map((item) => `${item} - \n`)}
           onChange={handleInputChange}
           placeholder="Опишіть детально ваше замовлення..."
           required
