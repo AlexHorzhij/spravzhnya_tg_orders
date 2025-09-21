@@ -5,10 +5,14 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import "./App.css";
 import type { TelegramUser } from "./types/telegram";
+import FormControl from "@mui/material/FormControl";
+import InputLabel from "@mui/material/InputLabel";
+import Select, { type SelectChangeEvent } from "@mui/material/Select";
+import MenuItem from "@mui/material/MenuItem";
 
 function App() {
   const [formData, setFormData] = useState({
-    establishment: "",
+    establishment: [],
     order: "",
     comment: "",
   });
@@ -35,24 +39,6 @@ function App() {
       console.log("Telegram User:", user);
       setTgUser(user || null);
 
-      // // // Спосіб 1: Отримуємо дані з URL параметрів (якщо передаються з бота)
-      // const urlParams = new URLSearchParams(window.location.search);
-      // console.log("urlParams: ", urlParams);
-      // const establishmentFromUrl = urlParams.get("establishment");
-      // console.log("establishmentFromUrl: ", establishmentFromUrl);
-      // const orderFromUrl = urlParams.get("order");
-      // console.log("orderFromUrl: ", orderFromUrl);
-      // const userIdFromUrl = urlParams.get("user_id");
-      // console.log("userIdFromUrl: ", userIdFromUrl);
-
-      // if (establishmentFromUrl || orderFromUrl) {
-      //   setFormData((prev) => ({
-      //     ...prev,
-      //     establishment: establishmentFromUrl || prev.establishment,
-      //     order: orderFromUrl || prev.order,
-      //   }));
-      // }
-
       // Спосіб 2: Якщо є user ID, можна отримати додаткові дані з API
       const userId = user?.id;
       console.log("userId: ", userId);
@@ -69,6 +55,8 @@ function App() {
 
   // Функція для отримання даних користувача з твоєї бази через Make.com або API
   const fetchUserDataFromAPI = async (telegramUserId: string | number) => {
+    setLoading(true);
+
     try {
       // Приклад запиту до Make.com webhook
       const response = await fetch(
@@ -79,20 +67,29 @@ function App() {
         const userData = await response.json();
         setIsNewOrder(!userData[0].order);
 
-        // Заповнюємо форму даними з таблиці
         setFormData((prev) => ({
           ...prev,
-          establishment: userData[0].company || prev.establishment,
+          establishment: userData[0].company.split(",") || prev.establishment,
           order: userData[0].order || userData[0].positions || "",
-          // інші дані з таблиці
+          comment: userData[0].order ? userData[0].comment : "",
         }));
       }
     } catch (error) {
       console.error("Помилка отримання даних користувача:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const handleSelectChange = (event: SelectChangeEvent) => {
     const { name, value } = event.target;
     setFormData((prev) => ({
       ...prev,
@@ -105,11 +102,11 @@ function App() {
 
     const tg = window.Telegram?.WebApp;
 
-    // Валідація
-    if (!formData.establishment.trim()) {
-      alert("Будь ласка, вкажіть заклад");
-      return;
-    }
+    // // Валідація
+    // if (!formData.establishment.trim()) {
+    //   alert("Будь ласка, вкажіть заклад");
+    //   return;
+    // }
 
     if (!formData.order.trim()) {
       alert("Будь ласка, опишіть замовлення");
@@ -158,7 +155,7 @@ function App() {
           alert("Замовлення успішно відправлено!");
           // Очищення форми для тестування
           setFormData({
-            establishment: "",
+            establishment: [],
             order: "",
             comment: "",
           });
@@ -191,12 +188,15 @@ function App() {
     <Box sx={{ p: 2, maxWidth: "100%" }}>
       {/* Привітання користувача */}
       {tgUser && (
-        <Box sx={{ mb: 2, p: 2, bgcolor: "#f5f5f5", borderRadius: 1 }}>
-          <Typography variant="h6">Вітаємо, {tgUser.first_name}! 👋</Typography>
+        <Box sx={{ mb: 1, p: 1, bgcolor: "#f5f5f5", borderRadius: 1 }}>
+          <Typography variant="h4">Вітаємо, {tgUser.first_name}! 👋</Typography>
         </Box>
       )}
 
-      <Typography variant="h5" sx={{ mb: 2, textAlign: "center" }}>
+      <Typography
+        variant="h5"
+        sx={{ mb: 1, color: "#000", textAlign: "center" }}
+      >
         {isNewOrder
           ? "Оформлення нового замовлення"
           : "Сьогодні ми вже отримали від вас замовлення, хочете щось змінити?"}
@@ -209,11 +209,12 @@ function App() {
         sx={{
           display: "flex",
           flexDirection: "column",
-          gap: 3,
+          gap: 2,
           width: "100%",
+          bgcolor: "#fff",
         }}
       >
-        <TextField
+        {/* <TextField
           name="establishment"
           label="Заклад"
           disabled
@@ -223,7 +224,22 @@ function App() {
           placeholder="Назва закладу або адреса"
           required
           sx={{ width: "100%" }}
-        />
+        /> */}
+
+        <FormControl fullWidth>
+          <InputLabel id="select-label">Age</InputLabel>
+          <Select
+            labelId="select-label"
+            id="select"
+            value={formData.establishment[0]}
+            label="Заклад"
+            onChange={handleSelectChange}
+          >
+            {formData.establishment.map((item) => (
+              <MenuItem value={item}>{item}</MenuItem>
+            ))}
+          </Select>
+        </FormControl>
 
         <TextField
           name="order"
@@ -260,7 +276,7 @@ function App() {
             fontWeight: "bold",
           }}
         >
-          📦 Підтвердити замовлення
+          📦 Підтвердити
         </Button>
       </Box>
 
