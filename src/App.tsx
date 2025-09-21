@@ -179,7 +179,7 @@ function App() {
   }
 
   return (
-    <Box sx={{ p: 2, maxWidth: "100%" }}>
+    <Box sx={{ bgcolor: "#fff", p: 2, maxWidth: "100%" }}>
       {/* Привітання користувача */}
       {tgUser && (
         <Box sx={{ mb: 1, p: 1, bgcolor: "#f5f5f5", borderRadius: 1 }}>
@@ -205,7 +205,6 @@ function App() {
           flexDirection: "column",
           gap: 2,
           width: "100%",
-          bgcolor: "#fff",
         }}
       >
         {/* <TextField
