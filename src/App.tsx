@@ -14,7 +14,7 @@ function App() {
   });
   console.log("formData: ", formData.establishment);
   const [loading, setLoading] = useState(true);
-
+  const [isNewOrder, setIsNewOrder] = useState(false);
   const [tgUser, setTgUser] = useState<TelegramUser | null>(null);
 
   useEffect(() => {
@@ -77,13 +77,13 @@ function App() {
 
       if (response.ok) {
         const userData = await response.json();
-        console.log("Отримані дані користувача:", userData);
+        setIsNewOrder(!userData[0].order);
 
         // Заповнюємо форму даними з таблиці
         setFormData((prev) => ({
           ...prev,
           establishment: userData[0].company || prev.establishment,
-          order: userData[0].order || prev.order,
+          order: userData[0].order || userData[0].positions || "",
           // інші дані з таблиці
         }));
       }
@@ -193,19 +193,13 @@ function App() {
       {tgUser && (
         <Box sx={{ mb: 2, p: 2, bgcolor: "#f5f5f5", borderRadius: 1 }}>
           <Typography variant="h6">Вітаємо, {tgUser.first_name}! 👋</Typography>
-          {tgUser.username && (
-            <Typography variant="body2" color="text.secondary">
-              <div>@{tgUser.username}</div>
-              <div>
-                {tgUser.first_name} {tgUser.last_name}
-              </div>
-            </Typography>
-          )}
         </Box>
       )}
 
       <Typography variant="h5" sx={{ mb: 2, textAlign: "center" }}>
-        Оформлення замовлення
+        {isNewOrder
+          ? "Оформлення нового замовлення"
+          : "Сьогодні ми вже отримали від вас замовлення, хочете щось змінити?"}
       </Typography>
 
       <Box
