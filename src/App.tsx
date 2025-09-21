@@ -53,7 +53,7 @@ function App() {
 
   // Функція для отримання даних користувача з твоєї бази через Make.com або API
   const fetchUserDataFromAPI = async (telegramUserId: string | number) => {
-    // setLoading(true);
+    setLoading(true);
 
     try {
       // Приклад запиту до Make.com webhook
@@ -237,6 +237,9 @@ function App() {
             label="Заклад"
             onChange={handleSelectChange}
           >
+            <MenuItem value={formData.establishment[0] || ""}>
+              {formData.establishment[0] || ""}
+            </MenuItem>
             {formData.establishment.map((item) => (
               <MenuItem value={item}>{item}</MenuItem>
             ))}
