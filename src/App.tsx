@@ -17,6 +17,8 @@ function App() {
     comment: "",
   });
 
+  console.log("formData: ", formData);
+
   const [loading, setLoading] = useState(true);
   const [isNewOrder, setIsNewOrder] = useState(false);
   const [tgUser, setTgUser] = useState<TelegramUser | null>(null);
@@ -42,6 +44,7 @@ function App() {
       if (userId) {
         fetchUserDataFromAPI(userId).finally(() => setLoading(false));
       }
+      setLoading(false);
     } else {
       console.log("Telegram WebApp недоступний - тестування в браузері");
       setLoading(false);
@@ -50,7 +53,7 @@ function App() {
 
   // Функція для отримання даних користувача з твоєї бази через Make.com або API
   const fetchUserDataFromAPI = async (telegramUserId: string | number) => {
-    setLoading(true);
+    // setLoading(true);
 
     try {
       // Приклад запиту до Make.com webhook
@@ -63,10 +66,16 @@ function App() {
         console.log("userData: ", userData);
         setIsNewOrder(!userData[0].order);
 
+        const positionsPrepare = userData[0].positions
+          ?.split(", ")
+          .map((item: string) => `${item} - \n`)
+          .join("");
+
+        console.log("orderPrepare: ", positionsPrepare);
         setFormData((prev) => ({
           ...prev,
           establishment: userData[0].company.split(",") || prev.establishment,
-          order: userData[0].order || userData[0].positions || "",
+          order: userData[0].order || positionsPrepare || "",
           comment: userData[0].order ? userData[0].comment : "",
         }));
       }
@@ -240,7 +249,7 @@ function App() {
           label="Замовлення"
           variant="outlined"
           rows={5}
-          value={formData.order.split(",").map((item) => `${item} - \n`)}
+          value={formData.order}
           onChange={handleInputChange}
           placeholder="Опишіть детально ваше замовлення..."
           required
