@@ -16,13 +16,12 @@ function App() {
     order: "",
     comment: "",
   });
-  console.log("formData: ", formData.establishment);
+
   const [loading, setLoading] = useState(true);
   const [isNewOrder, setIsNewOrder] = useState(false);
   const [tgUser, setTgUser] = useState<TelegramUser | null>(null);
 
   useEffect(() => {
-    // Перевіряємо наявність Telegram Web App
     if (typeof window !== "undefined" && window.Telegram?.WebApp) {
       const tg = window.Telegram.WebApp;
 
@@ -36,17 +35,13 @@ function App() {
 
       // Отримуємо дані користувача
       const user = tg.initDataUnsafe?.user;
-      console.log("Telegram User:", user);
       setTgUser(user || null);
 
       // Спосіб 2: Якщо є user ID, можна отримати додаткові дані з API
       const userId = user?.id;
-      console.log("userId: ", userId);
       if (userId) {
-        fetchUserDataFromAPI(userId);
+        fetchUserDataFromAPI(userId).finally(() => setLoading(false));
       }
-
-      setLoading(false);
     } else {
       console.log("Telegram WebApp недоступний - тестування в браузері");
       setLoading(false);
@@ -65,6 +60,7 @@ function App() {
 
       if (response.ok) {
         const userData = await response.json();
+        console.log("userData: ", userData);
         setIsNewOrder(!userData[0].order);
 
         setFormData((prev) => ({
@@ -76,8 +72,6 @@ function App() {
       }
     } catch (error) {
       console.error("Помилка отримання даних користувача:", error);
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -227,7 +221,7 @@ function App() {
         /> */}
 
         <FormControl fullWidth>
-          <InputLabel id="select-label">Age</InputLabel>
+          <InputLabel id="select-label">Заклад</InputLabel>
           <Select
             labelId="select-label"
             id="select"
