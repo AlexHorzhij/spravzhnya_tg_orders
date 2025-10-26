@@ -69,6 +69,8 @@ function App() {
       const response = await fetch(
         `${GET_USER_DATA_HOOK}?telegram_id=${telegramUserId}`
       );
+      console.log("GET_USER_DATA_HOOK: ", GET_USER_DATA_HOOK);
+      console.log("response: ", response);
 
       if (response.ok) {
         const userData = await response.json();
