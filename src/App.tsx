@@ -10,6 +10,15 @@ import InputLabel from "@mui/material/InputLabel";
 import Select, { type SelectChangeEvent } from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 
+const GET_USER_DATA_HOOK =
+  "https://n8n.ai-dev.kyiv.ua/webhook-test/525b9741-f6d3-42e4-88a4-e41abf1916cc";
+const SEND_FORM_DATA_HOOK =
+  "https://n8n.ai-dev.kyiv.ua/webhook-test/0dc72d31-ef5e-46da-9ddd-841d02417713";
+// const GET_USER_DATA_HOOK =
+//   "https://hook.eu2.make.com/61vvn35930prpjalq3j65h55oytmiton";
+// const SEND_FORM_DATA_HOOK =
+//   "https://hook.eu2.make.com/6pg72axri773n5j383wqhuonhymaq3wf";
+
 function App() {
   const [formData, setFormData] = useState({
     establishment: [],
@@ -58,7 +67,7 @@ function App() {
     try {
       // Приклад запиту до Make.com webhook
       const response = await fetch(
-        `https://hook.eu2.make.com/len9lty3ig6ugp97uwzbe55bvvsfdpcf?telegram_id=${telegramUserId}`
+        `${GET_USER_DATA_HOOK}?telegram_id=${telegramUserId}`
       );
 
       if (response.ok) {
@@ -137,16 +146,13 @@ function App() {
       console.log("Відправляємо замовлення:", orderData);
 
       // Відправка до Make.com або твого API
-      const response = await fetch(
-        "https://hook.eu2.make.com/6pg72axri773n5j383wqhuonhymaq3wf",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(orderData),
-        }
-      );
+      const response = await fetch(SEND_FORM_DATA_HOOK, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(orderData),
+      });
 
       if (response.ok) {
         // Успішна відправка
