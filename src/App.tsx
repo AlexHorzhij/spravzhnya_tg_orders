@@ -11,9 +11,9 @@ import Select, { type SelectChangeEvent } from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 
 const GET_USER_DATA_HOOK =
-  "https://n8n.ai-dev.kyiv.ua/webhook-test/525b9741-f6d3-42e4-88a4-e41abf1916cc";
+  "https://n8n.ai-dev.kyiv.ua/webhook/525b9741-f6d3-42e4-88a4-e41abf1916cc";
 const SEND_FORM_DATA_HOOK =
-  "https://n8n.ai-dev.kyiv.ua/webhook-test/0dc72d31-ef5e-46da-9ddd-841d02417713";
+  "https://n8n.ai-dev.kyiv.ua/webhook/0dc72d31-ef5e-46da-9ddd-841d02417713";
 // const GET_USER_DATA_HOOK =
 //   "https://hook.eu2.make.com/61vvn35930prpjalq3j65h55oytmiton";
 // const SEND_FORM_DATA_HOOK =
