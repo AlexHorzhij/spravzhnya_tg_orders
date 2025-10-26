@@ -241,13 +241,13 @@ function App() {
           <Select
             labelId="select-label"
             id="select"
-            value={formData.establishment[0]}
+            value={formData.establishment[0] && formData.establishment[0]}
             label="Заклад"
             onChange={handleSelectChange}
           >
-            <MenuItem value={formData.establishment[0] || ""}>
+            {/* <MenuItem value={formData.establishment[0] || ""}>
               {formData.establishment[0] || ""}
-            </MenuItem>
+            </MenuItem> */}
             {formData.establishment.map((item) => (
               <MenuItem value={item}>{item}</MenuItem>
             ))}
